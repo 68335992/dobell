@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="pic">
+
+	<typeAlias alias="commonPicDo" type="com.loveahu.dao.domain.common.CommonPicDo" />
+
+	<resultMap id="commonPicDoResult" class="commonPicDo">
+		<result property="_pid" column="_PID" />
+		<result property="_oltype" column="_OLTYPE" />
+		<result property="_name" column="_NAME" />
+		<result property="_type" column="_TYPE" />
+		<result property="_schoolid" column="_SCHOOLID" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+	
+	<select id="getNameBySchoolType" parameterClass="java.util.Map" resultClass="java.lang.String">
+	    SELECT
+	    	_name 
+	    FROM ds_common_pic 
+	    WHERE _schoolid = #schoolId# 
+	    	AND _type = #type# 
+	    	AND _status > 0
+    </select>
+
+	<select id="getAllScohool" resultMap="commonPicDoResult">
+		SELECT
+			_pid,
+			_oltype,
+			_name,
+			_type,
+			_schoolid,
+			_status
+		 FROM ds_common_pic
+	</select>
+
+</sqlMap>

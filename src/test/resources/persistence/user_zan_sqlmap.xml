@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="userZan">
+
+	<typeAlias alias="userZanDo" type="com.loveahu.dao.domain.user.UserZanDo" />
+
+	<resultMap id="userZanDoResult" class="userZanDo">
+		<result property="_zid" column="_ZID" />
+		<result property="_touid" column="_TOUID" />
+		<result property="_fromuid" column="_FROMUID" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_status" column="_STATUS" />
+		<result property="_direction" column="_DIRECTION" />
+	</resultMap>
+
+	<select id="getHomePageZaned" parameterClass="java.util.Map" resultMap="userZanDoResult">
+	    <![CDATA[
+		SELECT
+			_zid,
+			_touid,
+			_fromuid,
+			_createtime,
+			_status,
+			_direction
+		 FROM ds_user_zan
+		 WHERE _touid = #toUid# AND _fromuid = #fromUid# AND _status > 0
+		 ]]>
+	</select>
+	
+	<select id="getUserHomePageZanCount" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+	    <![CDATA[
+	    SELECT COUNT(*) 
+	    FROM ds_user_zan WHERE _touid = #toUid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getLastZanCount" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+	    <![CDATA[
+	    SELECT COUNT(*) FROM ds_user_zan WHERE to_days(_createtime) = to_days(now()) AND _fromuid = #fromUid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getAllZanCount" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+	    <![CDATA[
+	    SELECT COUNT(*) FROM ds_user_zan WHERE _touid = #toUid# AND _status > 0
+	    ]]>
+	</select>
+
+	<insert id="sendHomePageZan" parameterClass="java.util.Map" >
+		INSERT INTO ds_user_zan (
+			_touid,
+			_fromuid
+		)VALUES(
+			#_touid#,
+			#_fromuid#
+		)
+		<selectKey resultClass="java.lang.Long" keyProperty="_zid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

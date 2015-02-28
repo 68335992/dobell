@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="friendMain">
+
+	<typeAlias alias="friendMainDo" type="com.loveahu.dao.domain.friend.FriendMainDo" />
+
+	<resultMap id="friendMainDoResult" class="friendMainDo">
+		<result property="_fid" column="_FID" />
+		<result property="_uid" column="_UID" />
+		<result property="_fuid" column="_FUID" />
+		<result property="_gid" column="_GID" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_note" column="_NOTE" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getFriendMain" parameterClass="java.util.Map" resultMap="friendMainDoResult">
+		SELECT
+			_fid,
+			_uid,
+			_fuid,
+			_gid,
+			_createtime,
+			_note,
+			_status
+		 FROM ds_friend_main
+		 WHERE _uid = #uid# 
+		 	AND _fuid = #fuid# 
+		 	AND _status = 1
+	</select>
+	
+	<select id="getFuidsByUid" parameterClass="java.lang.Long" resultClass="java.lang.Long">
+	    <![CDATA[
+	    SELECT _fuid FROM ds_friend_main WHERE _uid = #uid# AND _status > 0
+	    ]]>
+	</select>
+
+	<insert id="addFriend" parameterClass="java.util.Map" >
+		INSERT INTO ds_friend_main (
+			_uid,
+			_fuid
+		)VALUES(
+			#uid#,
+			#fuid#
+		)
+		<selectKey resultClass="java.lang.Long" keyProperty="_fid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+	<delete id="delFriend" parameterClass="long">
+	    DELETE FROM ds_friend_main
+	    WHERE _fid=#fid#
+	</delete>
+	
+	<update id="deleteFriendRecord" parameterClass="java.util.Map">
+	    <![CDATA[
+	    UPDATE ds_friend_main SET _status = -1 WHERE (_uid = #uid# AND _fuid = #fuid#) OR (_uid = #fuid# AND _fuid = #uid#)
+	    ]]>
+	</update>
+	
+</sqlMap>

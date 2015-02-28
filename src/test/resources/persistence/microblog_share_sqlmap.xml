@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogShare">
+
+	<typeAlias alias="microblogShareDo" type="com.loveahu.dao.domain.microblog.MicroblogShareDo" />
+
+	<resultMap id="microblogShareDoResult" class="microblogShareDo">
+		<result property="_id" column="_ID" />
+		<result property="_source" column="_SOURCE" />
+		<result property="_text" column="_TEXT" />
+		<result property="_image" column="_IMAGE" />
+		<result property="_dourl" column="_DOURL" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getMicroblogShare" parameterClass="java.lang.Long" resultMap="microblogShareDoResult">
+	<![CDATA[
+		SELECT
+			_id,
+			_source,
+			_text,
+			_image,
+			_dourl,
+			_createtime,
+			_status
+		 FROM ds_microblog_share
+		 WHERE
+		 	_id = #sid#
+		 	AND
+		 	_status > 0
+	]]>
+	</select>
+
+	<insert id="addMicroblogShare" parameterClass="microblogShareDo" >
+		INSERT INTO ds_microblog_share (
+			_source,
+			_text,
+			_image,
+			_dourl
+		)VALUES(
+			#_source#,
+			#_text#,
+			#_image#,
+			#_dourl#
+		)
+		<selectKey resultClass="java.lang.Integer" keyProperty="_id">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
+	default-autowire="byName">
+
+	<!--数据库配置 -->
+	<import resource="dal/persistences.xml" />
+	<!-- 定时任务调度 --> 
+	<import resource="biz/time-task.xml" />
+	<!-- AOP切面设置 -->
+	<import resource="biz/aop-config.xml" />
+
+	<mvc:annotation-driven />
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.loveahu" />
+
+	<bean class="com.loveahu.util.UTF8StringBeanPostProcessor" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="useDefaultSuffixPattern" value="false" />
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames" value="messages" />
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- set the max upload size100MB -->
+		<property name="maxUploadSize">
+			<value>104857600</value>
+		</property>
+	</bean>
+
+	<!-- 统一异常处理 -->
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="error"></property>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.RuntimeException">error</prop>
+				<prop
+					key="org.springframework.web.multipart.MaxUploadSizeExceededException">error</prop>
+				<prop key="java.sql.SQLException">error</prop>
+				<prop key="org.springframework.dao.DataAccessException">error</prop>
+				<prop key="org.springframework.web.util.NestedServletException">error</prop>
+				<prop key="org.apache.velocity.exception.ResourceNotFoundException">error</prop>
+				<prop key="org.springframework.context.ApplicationContextException">error</prop>
+				<prop key="java.lang.Exception">error</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- velocity -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.velocity.VelocityLayoutView" />
+		<!--是否缓存模板-->
+        <property name="cache" value="true" />
+        <property name="prefix" value="" />
+        <property name="suffix" value=".vm" />
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="toolboxConfigLocation"><!--toolbox配置文件路径-->
+            <value>/WEB-INF/toolbox.xml</value>
+        </property>
+        <property name="dateToolAttribute"><!--日期函数名称-->
+            <value>dateTool</value>
+        </property>
+        <property name="numberToolAttribute"><!--数字函数名称-->
+            <value>numberTool</value>
+        </property>
+        <property name="exposeRequestAttributes"><!--是否开放request属性-->
+            <value>true</value>
+        </property>
+        <property name="exposeSessionAttributes"> <!--是否开放seesion属性-->
+            <value>true</value>
+        </property>
+		<property name="exposeSpringMacroHelpers" value="true" /><!--是否使用spring对宏定义的支持-->  
+		<property name="layoutUrl" value="../templates/layout/default.vm"/><!--指定layout文件-->
+		<!-- variable to override layoutUrl -->
+        <property name="layoutKey" value="layout"/>
+        <property name="screenContentKey" value="screen_content"/>
+    </bean>
+    <bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="WEB-INF/templates/" /><!-- 模板库文件的目录 -->
+        <property name="configLocation" value="/WEB-INF/velocity.properties" /><!-- properties velocity macro 模板库的列表 -->
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop><!-- 指定模板引擎进行模板处理的编码 -->
+                <prop key="output.encoding">UTF-8</prop><!-- 指定输出流的编码 -->
+                <prop key="default.contentType">text/html; charset=UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="viewNameTranslator" class="org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator"/>
+</beans>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="schoolMajor">
+
+	<typeAlias alias="schoolMajorDo" type="com.loveahu.dao.domain.school.SchoolMajorDo" />
+
+	<resultMap id="schoolMajorDoResult" class="schoolMajorDo">
+		<result property="_majid" column="_MAJID" />
+		<result property="_name" column="_NAME" />
+		<result property="_depid" column="_DEPID" />
+		<result property="_type" column="_TYPE" />
+		<result property="_createtime" column="_CREATETIME" />
+	</resultMap>
+
+	<select id="getDepInfo" parameterClass="java.lang.Long" resultMap="schoolMajorDoResult">
+		SELECT
+			_majid,
+			_name,
+			_depid,
+			_type,
+			_createtime
+		 FROM ds_school_major
+		 WHERE _schoolid = #schoolId#
+	</select>
+	
+	<select id="getMajInfo" parameterClass="java.util.Map" resultMap="schoolMajorDoResult">
+		SELECT
+			_majid,
+			_name,
+			_depid,
+			_type,
+			_createtime
+		 FROM ds_school_major
+		 WHERE _depid = #depId# AND _type = #type#
+	</select>
+	
+	<select id="getMajName" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	    SELECT _name FROM ds_school_major WHERE _majid = #majid#
+	</select>
+
+</sqlMap>

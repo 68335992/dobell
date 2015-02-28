@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogMain">
+
+   	<typeAlias alias="microblogMainDo" type="com.loveahu.dao.domain.microblog.MicroblogMainDo" />
+
+	<resultMap id="microblogMainDoResult" class="microblogMainDo">
+		<result property="_bid" column="_BID" />
+		<result property="_uid" column="_UID" />
+		<result property="_content" column="_CONTENT" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_lasttime" column="_LASTTIME" />
+		<result property="_mentionuid" column="_MENTIONUID" />
+		<result property="_picnum" column="_PICNUM" />
+		<result property="_commnum" column="_COMMNUM" />
+		<result property="_trannum" column="_TRANNUM" />
+		<result property="_zannum" column="_ZANNUM" />
+		<result property="_istran" column="_ISTRAN" />
+		<result property="_origbid" column="_ORIGBID" />
+		<result property="_transbid" column="_TRANSBID" />
+		<result property="_coins" column="_COINS" />
+		<result property="_hot" column="_HOT" />
+		<result property="_hotrank" column="_HOTRANK" />
+		<result property="_recrank" column="_RECRANK" />
+		<result property="_status" column="_STATUS" />
+		<result property="_tid" column="_TID" />
+		<result property="_shareid" column="_SHAREID" />
+		<result property="_schoolid" column="_SCHOOLID" />
+		<result property="_browsenum" column="_BROWSENUM" />
+		<result property="_type" column="_TYPE" />
+	</resultMap>
+
+	<select id="getMicroblogMainByBlogId" parameterClass="java.lang.Long" resultMap="microblogMainDoResult">
+	<![CDATA[
+		SELECT
+			_bid,
+			_uid,
+			_content,
+			_createtime,
+			_lasttime,
+			_mentionuid,
+			_picnum,
+			_commnum,
+			_trannum,
+			_zannum,
+			_istran,
+			_origbid,
+			_transbid,
+			_coins,
+			_hot,
+			_hotrank,
+			_recrank,
+			_status,
+			_tid,
+			_shareid,
+			_schoolid,
+			_browsenum,
+			_type
+		 FROM ds_microblog_main
+		 WHERE
+		 	_bid = #bid#
+		 AND
+			_status > 0
+	]]>
+	</select>
+	
+	<select id="getMicroblogMainById" parameterClass="java.lang.Long" resultMap="microblogMainDoResult">
+	<![CDATA[
+		SELECT
+			_bid,
+			_uid,
+			_content,
+			_createtime,
+			_lasttime,
+			_mentionuid,
+			_picnum,
+			_commnum,
+			_trannum,
+			_zannum,
+			_istran,
+			_origbid,
+			_transbid,
+			_coins,
+			_hot,
+			_hotrank,
+			_recrank,
+			_status,
+			_tid,
+			_shareid,
+			_schoolid,
+			_browsenum,
+			_type
+		 FROM ds_microblog_main
+		 WHERE
+		 	_bid = #bid#
+	]]>
+	</select>
+	
+	<select id="getNewBlogIdList" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	    SELECT DISTINCT _bid 
+	    FROM ds_microblog_main 
+	    WHERE _status > 0
+	    <isGreaterThan prepend="AND" property="lastId" compareValue="0">
+	    <![CDATA[
+	    AND _lasttime < (SELECT _lasttime FROM ds_microblog_main WHERE _bid = #lastId#)
+	    ]]> 
+	    </isGreaterThan>
+	    AND _schoolId = #schoolId# 
+	    ORDER BY _lasttime DESC LIMIT 0,#objCount#
+	</select>
+	
+	<select id="getHotBlogIdList" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	    SELECT DISTINCT _bid 
+	    FROM ds_microblog_main 
+	    WHERE _status > 0
+	    <isGreaterThan prepend="AND" property="lastId" compareValue="0">
+	    <![CDATA[
+	    AND _lasttime < (SELECT _lasttime FROM ds_microblog_main WHERE _bid = #lastId#)
+	    ]]> 
+	    </isGreaterThan>
+	    AND _schoolId = #schoolId# 
+	    ORDER BY _hot DESC LIMIT 0,#objCount#
+	</select>
+	
+	<select id="getFriendBlogIdList" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	    SELECT DISTINCT _bid 
+	    FROM ds_microblog_main b,ds_friend_main f 
+	    WHERE b._status > 0 
+	    	AND f._status > 0 
+	    	AND f._uid = #usrId# 
+	    	AND b._uid = f._fuid 
+	    	<isGreaterThan prepend="AND" property="lastId" compareValue="0">
+    	    <![CDATA[
+	    	AND _bid < #lastId#
+	    	]]> 
+	    	</isGreaterThan>
+	    	AND _schoolId = #schoolId# 
+	    ORDER BY _bid DESC LIMIT 0,#objCount#
+	</select>
+	
+	<select id="getGroupBlogIdList" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	    SELECT DISTINCT _bid 
+	    FROM ds_microblog_main b,ds_common_user u 
+	    WHERE b._status > 0 
+	    	AND u._status > 0 
+	    	AND b._uid = u._uid 
+	    	AND u._funcid LIKE 'ZZ%' 
+	    	<isGreaterThan prepend="AND" property="lastId" compareValue="0">
+    	    <![CDATA[
+	    	AND b._bid < #lastId# 
+	    	]]> 
+	    	</isGreaterThan>
+	    	AND u._schoolId = #schoolId# 
+    	ORDER BY _bid DESC LIMIT 0,#objCount#
+	</select>
+	
+	<select id="getSomeoneBlogIdList" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	   SELECT DISTINCT _bid 
+	   FROM ds_microblog_main 
+	   WHERE _status > 0 
+	   	AND _uid = #frdId# 
+	   	<isGreaterThan prepend="AND" property="lastId" compareValue="0">
+   	    <![CDATA[
+	   	AND _bid < #lastId# 
+	   	]]> 
+    	</isGreaterThan>
+	   	AND _schoolId = #schoolId# 
+	   	ORDER BY _bid DESC LIMIT 0,#objCount#
+	</select>
+	
+	<select id="getTopicBlogIdList" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	   SELECT DISTINCT _bid 
+	   FROM ds_microblog_main 
+	   WHERE _status > 0 
+	   	AND _tid = #topicId#
+	   	<isGreaterThan prepend="AND" property="lastId" compareValue="0">
+   	    <![CDATA[
+	   	AND _bid < #lastId# 
+	   	]]> 
+    	</isGreaterThan>
+	   	AND _schoolId = #schoolId# 
+	   ORDER BY _bid DESC LIMIT 0,#objCount#
+	</select>
+
+	<select id="getNowCount" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+	     <![CDATA[
+	     SELECT COUNT(*) 
+	     FROM ds_microblog_main 
+	     WHERE _tid = #topicId# 
+	     	AND _status > 0
+	     ]]> 
+	</select>
+	
+	<insert id="addMicroblogMain" parameterClass="java.util.Map" >
+		INSERT INTO ds_microblog_main (
+			_uid,
+			_content,
+			_mentionuid,
+			_picnum,
+			_istran,
+			_origbid,
+			_transbid,
+			_tid,
+			_shareid,
+			_schoolid,
+			_type
+		)VALUES(
+			#_uid#,
+			#_content#,
+			#_mentionuid#,
+			#_picnum#,
+			#_istran#,
+			#_origbid#,
+			#_transbid#,
+			#_tid#,
+			#_shareid#,
+			#_schoolid#,
+			#_type#
+		)
+		<selectKey resultClass="java.lang.Long" keyProperty="_bid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+	<update id="deleteMicroblogByBlogId" parameterClass="java.util.Map" >
+		UPDATE ds_microblog_main
+		SET
+			_status = #deleteFlag#
+		WHERE
+			_bid = #blogId#
+	</update>
+
+	<update id="increaseMblogBrowse" parameterClass="java.util.Map">
+	    UPDATE ds_microblog_main 
+	    SET _browsenum = _browsenum + #num# 
+	    WHERE _bid = #bid#
+	</update>
+
+</sqlMap>

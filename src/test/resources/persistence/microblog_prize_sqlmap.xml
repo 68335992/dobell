@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogPrize">
+
+	<typeAlias alias="microblogPrizeDo" type="com.loveahu.dao.domain.microblog.MicroblogPrizeDo" />
+
+	<resultMap id="microblogPrizeDoResult" class="microblogPrizeDo">
+		<result property="_pid" column="_PID" />
+		<result property="_uid" column="_UID" />
+		<result property="_hostid" column="_HOSTID" />
+		<result property="_actid" column="_ACTID" />
+		<result property="_status" column="_STATUS" />
+		<result property="_schoolid" column="_SCHOOLID" />
+	</resultMap>
+
+	<select id="getMicroblog" parameterClass="java.lang.Integer" resultMap="microblogPrizeDoResult">
+	<![CDATA[
+		SELECT
+			_pid,
+			_uid,
+			_hostid,
+			_actid,
+			_status,
+			_schoolid,
+		 FROM ds_microblog_prize
+		 WHERE _pid = #pid# 
+		 AND _status > 0
+	]]>
+	</select>
+
+	<insert id="addMicroblogPrize" parameterClass="microblogPrizeDo" >
+		INSERT INTO ds_microblog_prize (
+			_uid,
+			_hostid,
+			_actid,
+			_schoolid
+		)VALUES(
+			#_uid#,
+			#_hostid#,
+			#_actid#,
+			#_schoolid#
+		)
+		<selectKey resultClass="java.lang.Integer" keyProperty="_pid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

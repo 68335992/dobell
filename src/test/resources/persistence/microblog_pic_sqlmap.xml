@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogPic">
+
+	<typeAlias alias="microblogPicDo" type="com.loveahu.dao.domain.microblog.MicroblogPicDo" />
+
+	<resultMap id="microblogPicDoResult" class="microblogPicDo">
+		<result property="_pid" column="_PID" />
+		<result property="_bid" column="_BID" />
+		<result property="_picpath" column="_PICPATH" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getMicroblogPicByBid" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	<![CDATA[
+		SELECT
+			_picpath
+		 FROM ds_microblog_pic
+		 WHERE
+		 	_bid = #bid#
+		 AND
+		 	_status > 0
+	]]>
+	</select>
+
+	<insert id="addMicroblogPic" parameterClass="microblogPicDo" >
+		INSERT INTO ds_microblog_pic (
+			_picpath
+		)VALUES(
+			#_picpath#
+		)
+	</insert>
+
+</sqlMap>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogZan">
+
+	<typeAlias alias="microblogZanDo" type="com.loveahu.dao.domain.microblog.MicroblogZanDo" />
+
+	<resultMap id="microblogZanDoResult" class="microblogZanDo">
+		<result property="_zid" column="_ZID" />
+		<result property="_uid" column="_UID" />
+		<result property="_bid" column="_BID" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getMicroblogZanAllCount" parameterClass="java.lang.Integer" resultClass="java.lang.Integer">
+	<![CDATA[
+		SELECT
+			COUNT(*)
+		 FROM ds_microblog_zan
+		 	WHERE
+		 		_bid = #bid#
+		 		AND
+		 		_status > 0
+	]]>
+	</select>
+	
+	<select id="getZanByUidBlogId" parameterClass="java.util.Map" resultMap="microblogZanDoResult">
+	    <![CDATA[
+	    	SELECT
+	    		_zid,
+	    		_uid,
+	    		_bid,
+	    		_createtime,
+	    		_status
+	    	FROM
+	    		ds_microblog_zan
+	    	WHERE _uid = #uid# 
+	    		AND _bid = #bid# 
+	    		AND _status > 0
+	    ]]>
+	</select>
+
+	<insert id="addMicroblogZan" parameterClass="microblogZanDo" >
+		INSERT INTO ds_microblog_zan (
+			_uid,
+			_bid
+		)VALUES(
+			#_uid#,
+			#_bid#
+		)
+	</insert>
+
+</sqlMap>

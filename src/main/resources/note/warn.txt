@@ -1,0 +1,11 @@
+1.ds_common_user uid mediumint?   8位的用mediumint够了吗？
+2.database numeric type length 8?11?   8位
+3._status type int -> tinyint       tinyint
+	ds_common_activity       
+4.mix datetime & timestamp     
+	ds_common_scrip
+5.autoincrease id int->long
+6.UserAlterPassword.php安全性风险高
+7.UserHelper.getUserCompleteInfo -> blogCount 使用冗余而非实时计算
+
+

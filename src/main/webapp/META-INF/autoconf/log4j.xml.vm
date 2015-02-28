@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <appender name="INFO" class="cn.com.tx.log4j.DailyMaxRollingFileAppender">
+	<param name="File" value="${dobell_log_info_file}"/>
+	<param name="Append" value="true"/>
+	<param name="DatePattern" value="'.'yyyy-MM-dd" />
+	<param name="MaxBackupIndex" value="4"/>
+	<layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %c:%L - %m%n"/>
+	</layout>
+	<filter class="org.apache.log4j.varia.LevelRangeFilter">
+		<param name="LevelMin" value="INFO" />
+		<param name="LevelMax" value="INFO" />
+	</filter>
+  </appender>
+
+	<appender name="WARN" class="cn.com.tx.log4j.DailyMaxRollingFileAppender">
+		<param name="File" value="${dobell_log_warn_file}"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %c:%L - %m%n"/>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="WARN" />
+			<param name="LevelMax" value="WARN" />
+		</filter>
+	</appender>
+
+	<appender name="ERROR" class="cn.com.tx.log4j.DailyMaxRollingFileAppender">
+		<param name="File" value="${dobell_log_error_file}"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="MaxBackupIndex" value="100"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %c:%L - %m%n"/>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	  <root> 
+		<priority value="${dobell_log_level}" />
+		<appender-ref ref="INFO"/>
+		<appender-ref ref="WARN"/>
+		<appender-ref ref="ERROR"/>
+	  </root>
+	  
+</log4j:configuration>
+

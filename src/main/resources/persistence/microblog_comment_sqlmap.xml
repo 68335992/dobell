@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogComment">
+
+	<typeAlias alias="microblogCommentDo" type="com.loveahu.dao.domain.microblog.MicroblogCommentDo" />
+
+	<resultMap id="microblogCommentDoResult" class="microblogCommentDo">
+		<result property="_cid" column="_CID" />
+		<result property="_uid" column="_UID" />
+		<result property="_content" column="_CONTENT" />
+		<result property="_hostbid" column="_HOSTBID" />
+		<result property="_targetuid" column="_TARGETUID" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_hostcid" column="_HOSTCID" />
+		<result property="_mentionuid" column="_MENTIONUID" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getMicroblogCommentByCommentId" parameterClass="java.lang.Long" resultMap="microblogCommentDoResult">
+	<![CDATA[
+		SELECT
+			_cid,
+			_uid,
+			_content,
+			_hostbid,
+			_hostcid,
+			_targetuid,
+			_createtime,
+			_mentionuid,
+			_status
+		 FROM ds_microblog_comment
+		 WHERE
+			_cid = #commentId#
+		 AND
+			_status > 0
+	]]>
+	</select>
+	
+	<select id="getMicroblogCommentIdList" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	<![CDATA[
+		SELECT
+			_cid
+		FROM ds_microblog_comment
+		WHERE
+			_hostbid = #blogId#
+			AND
+			_status > 0
+		ORDER BY _cid ASC 
+		LIMIT 0,#objCount#
+	]]>
+	</select>
+	
+	<insert id="addMicroblogComment" parameterClass="microblogCommentDo" >
+		INSERT INTO ds_microblog_comment (
+			_uid,
+			_content,
+			_hostbid,
+			_targetuid,
+			_hostcid,
+			_mentionuid
+		)VALUES(
+			#_uid#,
+			#_content#,
+			#_hostbid#,
+			#_targetuid#,
+			#_hostcid#,
+			#_mentionuid#
+		)
+		<selectKey resultClass="java.lang.Long" keyProperty="_cid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogTopic">
+
+	<typeAlias alias="microblogTopicDo" type="com.loveahu.dao.domain.microblog.MicroblogTopicDo" />
+
+	<resultMap id="microblogTopicDoResult" class="microblogTopicDo">
+		<result property="_tid" column="_TID" />
+		<result property="_topic" column="_TOPIC" />
+		<result property="_hot" column="_HOT" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_createuid" column="_CREATEUID" />
+		<result property="_coins" column="_COINS" />
+		<result property="_status" column="_STATUS" />
+		<result property="_schoolid" column="_SCHOOLID" />
+		<result property="_tip" column="_TIP" />
+		<result property="_intro" column="_INTRO" />
+		<result property="_recrank" column="_RECRANK" />
+		<result property="_type" column="_TYPE" />
+		<result property="_good" column="_GOOD" />
+	</resultMap>
+
+	<select id="getMicroblogTopicByTopicId" parameterClass="java.lang.Long" resultMap="microblogTopicDoResult">
+	<![CDATA[
+		SELECT
+			_tid,
+			_topic,
+			_hot,
+			_createtime,
+			_createuid,
+			_coins,
+			_status,
+			_schoolid,
+			_tip,
+			_intro,
+			_recrank,
+			_type,
+			_good
+		 FROM ds_microblog_topic
+		 WHERE
+		 	_tid = #tid#
+		 	AND
+		 	_status > 0
+	]]>
+	</select>
+	
+	<select id="getGoodTopicIdBySchoolId" parameterClass="java.lang.Long" resultClass="java.lang.Long">
+	    <![CDATA[
+	    SELECT _tid 
+	    FROM ds_microblog_topic 
+	    WHERE _schoolid = #schoolId# 
+	    AND _status > 0 
+	    AND _good > 0
+	    ]]>
+	</select>
+	
+	<select id="getWallIngTopicIdList" parameterClass="java.lang.Long" resultClass="java.lang.Long">
+	    <![CDATA[
+	    SELECT _tid 
+	    FROM ds_microblog_topic 
+	    WHERE _schoolid = #schoolId# 
+	    	AND _type = 3 
+	    	AND _status > 0
+	    ]]>
+	</select>
+
+	<select id="getMicroblogTopicNowCount" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+	<![CDATA[
+		SELECT
+			COUNT(*)
+		 FROM ds_microblog_main
+		 WHERE
+		 	_tid = #topicId#
+		 	AND
+		 	_status > 0
+	]]>
+	</select>
+	
+	<select id="getTopicIdByTopicStr" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	    <![CDATA[
+	    SELECT _tid FROM ds_microblog_topic 
+	    WHERE _topic = #topicSte# 
+	    	AND _schoolId = #schoolId# 
+	    	AND _status > 0
+    	]]>
+	</select>
+
+	<insert id="addMicroblogTopic" parameterClass="microblogTopicDo" >
+		INSERT INTO ds_microblog_topic (
+			_topic,
+			_createuid,
+			_schoolid
+		)VALUES(
+			#_topic#,
+			#_createuid#,
+			#_schoolid#
+		)
+		<selectKey resultClass="java.lang.Integer" keyProperty="_tid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig   PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+<settings
+	cacheModelsEnabled="true"
+	enhancementEnabled="true"
+	lazyLoadingEnabled="true"
+	errorTracingEnabled="true"
+	maxRequests="512"
+	maxSessions="128"
+	maxTransactions="32"
+	useStatementNamespaces="true"
+/>
+
+<sqlMap resource="persistence/common_activity_sqlmap.xml"/>
+<sqlMap resource="persistence/common_pic_sqlmap.xml"/>
+<sqlMap resource="persistence/common_school_sqlmap.xml"/>
+<sqlMap resource="persistence/common_user_sqlmap.xml"/>
+
+<sqlMap resource="persistence/friend_main_sqlmap.xml"/>
+
+<sqlMap resource="persistence/microblog_at_sqlmap.xml"/>
+<sqlMap resource="persistence/microblog_comment_sqlmap.xml"/>
+<sqlMap resource="persistence/microblog_main_sqlmap.xml"/>
+<sqlMap resource="persistence/microblog_pic_sqlmap.xml"/>
+<sqlMap resource="persistence/microblog_prize_sqlmap.xml"/>
+<sqlMap resource="persistence/microblog_share_sqlmap.xml"/>
+<sqlMap resource="persistence/microblog_topic_sqlmap.xml"/>
+<sqlMap resource="persistence/microblog_zan_sqlmap.xml"/>
+
+<sqlMap resource="persistence/school_department_sqlmap.xml"/>
+<sqlMap resource="persistence/school_major_sqlmap.xml"/>
+
+<sqlMap resource="persistence/user_follow_sqlmap.xml"/>
+<sqlMap resource="persistence/user_remark_sqlmap.xml"/>
+<sqlMap resource="persistence/user_zan_sqlmap.xml"/>
+
+</sqlMapConfig>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="userFollow">
+
+	<typeAlias alias="userFollowDo" type="com.loveahu.dao.domain.user.UserFollowDo" />
+
+	<resultMap id="userFollowDoResult" class="userFollowDo">
+		<result property="_id" column="_ID" />
+		<result property="_fromuid" column="_FROMUID" />
+		<result property="_touid" column="_TOUID" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getAllFollowed" parameterClass="java.lang.Long" resultClass="java.lang.Long">
+	    <![CDATA[
+	    SELECT _fromuid FROM ds_user_follow WHERE _touid = #toUid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getAllFollows" parameterClass="java.lang.Long" resultClass="java.lang.Long">
+	    <![CDATA[
+	    SELECT _touid FROM ds_user_follow WHERE _fromuid = #fromUid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getFollowedStatus" parameterClass="java.util.Map" resultMap="userFollowDoResult">
+	    <![CDATA[
+	    SELECT * FROM ds_user_follow WHERE _touid = #toUid# AND _fromuid = #fromUid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<update id="resetFollow" parameterClass="java.util.Map">
+	    <![CDATA[
+	    UPDATE ds_user_follow 
+	    SET _status = -1 
+	    WHERE _fromuid = #fromUid# AND _touid = #toUid# AND _status > 0
+	    ]]>
+	</update>
+
+	<insert id="sendFollow" parameterClass="java.util.Map" >
+		INSERT INTO ds_user_follow (
+			_fromuid,
+			_touid
+		)VALUES(
+			#_fromuid#,
+			#_touid#
+		)
+		<selectKey resultClass="java.lang.Long" keyProperty="_id">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

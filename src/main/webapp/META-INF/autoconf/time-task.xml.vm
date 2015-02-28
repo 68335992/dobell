@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- 定时调度任务 -->
+	<bean id="testTask" class="com.loveahu.task.TestTask" />
+	
+	<bean id="testJob" lazy-init="false" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject"><ref bean="testTask"/></property>
+		<property name="targetMethod"><value>execute</value></property>
+	</bean>
+	<bean id="testTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail"><ref bean="testJob"/></property>
+		<property name="cronExpression" value="0/30 * * * * ?"></property>
+	</bean>
+	
+	
+	<bean id="appTimeTaskScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="testTrigger"/>
+			</list>
+		</property>
+	</bean>
+</beans>

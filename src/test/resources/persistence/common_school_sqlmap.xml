@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="school">
+
+	<typeAlias alias="commonSchoolDo" type="com.loveahu.dao.domain.common.CommonSchoolDo" />
+
+	<resultMap id="commonSchoolDoResult" class="commonSchoolDo">
+		<result property="_schoolid" column="_SCHOOLID" />
+		<result property="_cnname" column="_CNNAME" />
+		<result property="_abbr" column="_ABBR" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getSchool" parameterClass="java.lang.Long" resultMap="commonSchoolDoResult">
+	    <![CDATA[
+		SELECT
+			_schoolid,
+			_cnname,
+			_abbr,
+			_createtime,
+			_status
+		 FROM ds_common_school
+		 WHERE
+		 	_schoolid = #schoolId# AND _status > 0
+	 	]]>
+	</select>
+
+</sqlMap>

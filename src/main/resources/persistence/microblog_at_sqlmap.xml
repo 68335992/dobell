@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="microblogAt">
+
+	<typeAlias alias="microblogAtDo" type="com.loveahu.dao.domain.microblog.MicroblogAtDo" />
+
+	<resultMap id="microblogAtDoResult" class="microblogAtDo">
+		<result property="_aid" column="_AID" />
+		<result property="_hostid" column="_HOSTID" />
+		<result property="_fromuid" column="_FROMUID" />
+		<result property="_touid" column="_TOUID" />
+		<result property="_type" column="_TYPE" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_read" column="_READ" />
+		<result property="_ispushed" column="_ISPUSHED" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getMicroblogAtBYAid" parameterClass="java.lang.Integer" resultMap="microblogAtDoResult">
+		<![CDATA[
+			SELECT
+				_aid,
+				_hostid,
+				_fromuid,
+				_touid,
+				_type,
+				_createtime,
+				_read,
+				_ispushed,
+				_status
+			FROM ds_microblog_at
+			WHERE
+			 	_aid = #aid#
+			 	AND
+			 WHERE _status > 0
+		]]>
+	</select>
+
+	<insert id="addMicroblogAt" parameterClass="microblogAtDo" >
+		INSERT INTO ds_microblog_at (
+			_hostid,
+			_fromuid,
+			_touid,
+			_type
+		)VALUES(
+			#_hostid#,
+			#_fromuid#,
+			#_touid#,
+			#_type#
+		)
+		<selectKey resultClass="java.lang.Integer" keyProperty="_aid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

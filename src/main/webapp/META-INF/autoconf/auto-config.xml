@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<config description="自动配置"> 
+	<group name="dataCenter-config">
+	    <property name="dobell.driverClassName" defaultValue="com.mysql.jdbc.Driver" description="" />
+		<property name="dobell.url" defaultValue="jdbc:mysql://127.0.0.1:3306/dobell" description="db" />
+		<property name="dobell.username" defaultValue="root" description="" />
+		<property name="dobell.password" defaultValue="111111" description="" />
+		<property name="dobell.maxActive" defaultValue="256" description="" />
+		<property name="dobell.maxIdle" defaultValue="64" description="" />
+		<property name="dobell.maxWait" defaultValue="30000" description="" />
+	    
+		<property name="dobell.log.info.file" defaultValue="./tomcat/logs/out_info.log" description="log输出目录,注意这个目录是应该事先建好的" />
+		<property name="dobell.log.warn.file" defaultValue="./tomcat/logs/out_warn.log" description="log输出目录,注意这个目录是应该事先建好的" />
+		<property name="dobell.log.error.file" defaultValue="./tomcat/logs/out_error.log" description="log输出目录,注意这个目录是应该事先建好的" />
+		<property name="dobell.log.level" defaultValue="INFO" description="txclub log4j级别" />  
+	</group>
+	<script>
+		<generate template="web.xml.vm" destfile="WEB-INF/web.xml" charset="UTF-8" />
+		<generate template="persistences.xml.vm" destfile="WEB-INF/dal/persistences.xml" charset="UTF-8" /> 
+		<generate template="log4j.xml.vm" destfile="WEB-INF/classes/log4j.xml" charset="UTF-8" />
+		<generate template="time-task.xml.vm" destfile="WEB-INF/biz/time-task.xml" charset="UTF-8" />
+		<generate template="aop-config.xml.vm" destfile="WEB-INF/biz/aop-config.xml" charset="UTF-8" />
+	</script>
+</config> 

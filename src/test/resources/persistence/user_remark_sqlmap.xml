@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="userRemark">
+
+	<typeAlias alias="userRemarkDo" type="com.loveahu.dao.domain.user.UserRemarkDo" />
+
+	<resultMap id="userRemarkDoResult" class="userRemarkDo">
+		<result property="_id" column="_ID" />
+		<result property="_touid" column="_TOUID" />
+		<result property="_fromuid" column="_FROMUID" />
+		<result property="_name" column="_NAME" />
+		<result property="_createtime" column="_CREATETIME" />
+		<result property="_status" column="_STATUS" />
+	</resultMap>
+
+	<select id="getRemark" parameterClass="java.util.Map" resultClass="java.lang.String">
+	    <![CDATA[
+	    SELECT _name 
+	    FROM ds_user_remark 
+	    WHERE _touid = #toUid# AND _fromuid = #fromUid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<update id="resetRemark" parameterClass="java.util.Map">
+	    <![CDATA[
+	    UPDATE ds_user_remark 
+	    SET _status = -1 
+	    WHERE _fromuid = #fromUid# AND _touid = #toUid# AND _status > 0
+	    ]]>
+	</update>
+
+	<insert id="sendRemark" parameterClass="java.util.Map" >
+		INSERT INTO ds_user_remark  (
+			_touid,
+			_fromuid,
+			_name
+		)VALUES(
+			#_touid#,
+			#_fromuid#,
+			#_name#
+		)
+		<selectKey resultClass="java.lang.Long" keyProperty="_id">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>

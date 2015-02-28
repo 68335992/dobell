@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="schoolDepartment">
+
+	<typeAlias alias="schoolDepartmentDo" type="com.loveahu.dao.domain.school.SchoolDepartmentDo" />
+
+	<resultMap id="schoolDepartmentDoResult" class="schoolDepartmentDo">
+		<result property="_depid" column="_DEPID" />
+		<result property="_name" column="_NAME" />
+		<result property="_fullname" column="_FULLNAME" />
+		<result property="_schoolid" column="_SCHOOLID" />
+		<result property="_createtime" column="_CREATETIME" />
+	</resultMap>
+
+	<select id="getDepartmentsBySchool" parameterClass="java.lang.Long" resultMap="schoolDepartmentDoResult">
+		SELECT
+			_depid,
+			_name,
+			_fullname,
+			_schoolid,
+			_createtime
+		 FROM ds_school_department
+		 WHERE _schoolid=#schoolId#
+	</select>
+	
+	<select id="getDepName" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	    SELECT _name FROM ds_school_department WHERE _depid = #depid#
+	</select>
+
+</sqlMap>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="user">
+
+   	<typeAlias alias="commonUserDo" type="com.loveahu.dao.domain.common.CommonUserDo" />
+
+	<resultMap id="commonUserDoResult" class="commonUserDo">
+		<result property="_uid" column="_UID" />
+		<result property="_funcid" column="_FUNCID" />
+		<result property="_deviid" column="_DEVIID" />
+		<result property="_nickname" column="_NICKNAME" />
+		<result property="_realname" column="_REALNAME" />
+		<result property="_namevisiable" column="_NAMEVISIABLE" />
+		<result property="_password" column="_PASSWORD" />
+		<result property="_depid" column="_DEPID" />
+		<result property="_majid" column="_MAJID" />
+		<result property="_enrdate" column="_ENRDATE" />
+		<result property="_hometown" column="_HOMETOWN" />
+		<result property="_hobby" column="_HOBBY" />
+		<result property="_constel" column="_CONSTEL" />
+		<result property="_lovestatus" column="_LOVESTATUS" />
+		<result property="_status" column="_STATUS" />
+		<result property="_email" column="_EMAIL" />
+		<result property="_emailstatus" column="_EMAILSTATUS" />
+		<result property="_regdate" column="_REGDATE" />
+		<result property="_sex" column="_SEX" />
+		<result property="_avatarpath" column="_AVATARPATH" />
+		<result property="_background" column="_BACKGROUND" />
+		<result property="_phone" column="_PHONE" />
+		<result property="_phonestatus" column="_PHONESTATUS" />
+		<result property="_qq" column="_QQ" />
+		<result property="_selfintro" column="_SELFINTRO" />
+		<result property="_badge" column="_BADGE" />
+		<result property="_oltype" column="_OLTYPE" />
+		<result property="_getuiid" column="_GETUIID" />
+		<result property="_lastlunchtime" column="_LASTLUNCHTIME" />
+		<result property="_schoolid" column="_SCHOOLID" />
+	</resultMap>
+
+	<select id="getUserByUid" parameterClass="java.lang.Long" resultMap="commonUserDoResult">
+		<![CDATA[
+		SELECT
+			_uid,
+			_funcid,
+			_deviid,
+			_nickname,
+			_realname,
+			_namevisiable,
+			_password,
+			_depid,
+			_majid,
+			_enrdate,
+			_hometown,
+			_hobby,
+			_constel,
+			_lovestatus,
+			_status,
+			_email,
+			_emailstatus,
+			_regdate,
+			_sex,
+			_avatarpath,
+			_background,
+			_phone,
+			_phonestatus,
+			_qq,
+			_selfintro,
+			_badge,
+			_oltype,
+			_getuiid,
+			_lastlunchtime,
+			_schoolid
+		 FROM ds_common_user
+		 WHERE
+		 	_uid = #uid#
+		 	AND _status>0
+		]]>
+	</select>
+	
+	<select id="getUserByFuncid" parameterClass="java.lang.Long" resultMap="commonUserDoResult">
+		<![CDATA[
+		SELECT
+			_uid,
+			_funcid,
+			_deviid,
+			_nickname,
+			_realname,
+			_namevisiable,
+			_password,
+			_depid,
+			_majid,
+			_enrdate,
+			_hometown,
+			_hobby,
+			_constel,
+			_lovestatus,
+			_status,
+			_email,
+			_emailstatus,
+			_regdate,
+			_sex,
+			_avatarpath,
+			_background,
+			_phone,
+			_phonestatus,
+			_qq,
+			_selfintro,
+			_badge,
+			_oltype,
+			_getuiid,
+			_lastlunchtime,
+			_schoolid
+		 FROM ds_common_user
+		 WHERE
+		 	_funcid = #funcId# 
+			AND _schoolid = #schoolId# 
+		]]>
+	</select>
+	
+	<select id="getUsrIdByFuncId" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	    <![CDATA[
+		SELECT _uid 
+		FROM ds_common_user 
+		WHERE _funcid = #funcId# 
+			AND _schoolid = #schoolId# 
+			AND _status > 0
+		]]>
+	</select>
+	
+	<select id="getGetuiIdByUsrId" parameterClass="long" resultClass="java.lang.String">
+	    <![CDATA[
+	    SELECT _getuiid FROM ds_common_user WHERE _uid = #uid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getUserOlType" parameterClass="long" resultClass="java.lang.Byte">
+	    <![CDATA[
+	    SELECT _oltype FROM ds_common_user WHERE _uid = #uid#
+	    ]]>
+	</select>
+	
+	<select id="getUserHeadByUsrId" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	    <![CDATA[
+	    SELECT _avatarpath FROM ds_common_user WHERE _uid = #uid#
+	    ]]>
+	</select>
+	
+	<select id="getPhoneStatus" parameterClass="java.lang.Long" resultClass="java.lang.Byte">
+	    <![CDATA[
+	    SELECT _phonestatus FROM ds_common_user WHERE _uid = #uid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getPhoneByFuncId" parameterClass="java.util.Map" resultClass="java.lang.String">
+	    <![CDATA[
+	    SELECT _phone FROM ds_common_user WHERE _funcid = #funcId# AND _schoolid = #schoolId# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getNickByUsrId" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	    <![CDATA[
+	    SELECT _nickname FROM ds_common_user WHERE _uid = #uid# AND _status > 0
+	    ]]>
+	</select>
+	
+	<select id="getUserBadge" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+	    SELECT _badge FROM ds_common_user WHERE _uid = #uid#
+	</select>
+	
+	<select id="getUsrType" parameterClass="java.lang.Long" resultClass="java.lang.Byte">
+	    SELECT _status FROM ds_common_user WHERE _uid = #uid#
+	</select>
+	
+	<update id="alterPasswordByFuncId" parameterClass="java.util.Map">
+	    UPDATE ds_common_user 
+	    SET _password = #password# 
+	    WHERE _funcid = #funcId# 
+	    AND _schoolid = #schoolId#
+	</update>
+	
+	<update id="clearBadge" parameterClass="java.lang.Long">
+	    UPDATE ds_common_user
+	    SET _badge = 0
+	    WHERE _uid=#uid#
+	</update>
+	
+	<update id="increaseBadge" parameterClass="java.lang.Long">
+	    <![CDATA[
+	    UPDATE ds_common_user SET _badge = _badge + 1 WHERE _uid = #uid#
+	    ]]>
+	</update>
+	
+	<insert id="addCommonUser" parameterClass="commonUserDo" >
+		INSERT INTO ds_common_user (
+			_funcid,
+			_deviid,
+			_nickname,
+			_realname,
+			_password,
+			_sex,
+			_avatarpath,
+			_schoolid
+		)VALUES(
+			#_funcid#,
+			#_deviid#,
+			#_nickname#,
+			#_realname#,
+			#_password#,
+			#_sex#,
+			#_avatarpath#,
+			#_schoolid#
+		)
+		<selectKey resultClass="java.lang.Integer" keyProperty="_uid">
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID]]>
+		</selectKey>
+	</insert>
+
+</sqlMap>
